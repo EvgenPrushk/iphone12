@@ -31,10 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const deactive = () => {
-      // forEach 
+      // forEach
       cardDetailChangeElems.forEach((btn) => btn.classList.remove("active"));
     };
-    // перебор массива с помощью функции 
+    // перебор массива с помощью функции
     cardDetailChangeElems.forEach((btn, i) => {
       btn.addEventListener("click", () => {
         // проверяем есть ли у элемента класс active
@@ -52,5 +52,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const accordion = () => {
+    const characteristicsListElem = document.querySelector(".characteristics__list");
+    const characteristicsItemElems = document.querySelector(".characteristics__item");
+
+    const open = (button, dropDown) => {
+      closeAllDrops();
+      dropDown.style.height = `${dropDown.scrollHeight}px`;
+      button.classList.add("active");
+      dropDown.classList.add("active");
+    };
+
+    const close = (button, dropDown) => {
+      button.classList.remove("active");
+      dropDown.classList.remove("active");
+      dropDown.style.height = "";
+    };
+    const closeAllDrops = (button, dropDown) => {
+      characteristicsItemElems.forEach((elem) => {
+        if (elem.children[0] !== button && elem.children[1] !== dropDown) {
+          close(elem.children[0], elem.children[1]);
+        }
+      });
+    };
+
+    characteristicsListElem.addEventListener("click", (event) => {
+      const target = event.target;
+      //  если target содежит класс characteristics__title
+      if (target.classList.contains("characteristics__title")) {
+        //ищем класс у родителя, если его нет у элемента с помощью всплытия
+        const parent = target.closest(".characteristics__item");
+        const description = parent.querySelector(
+          ".characteristics__description"
+        );
+        // выполяняется первое верно, то оно выполниться, иначе выполниться второе
+        description.classList.contains("active") ? close(target, description) : open(target, description);
+      }
+    });
+  };
+
   tabs();
+  accordion();
 });
